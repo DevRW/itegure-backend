@@ -12,11 +12,11 @@ export class SubscriptionCtrl {
         sender: 'lreminder',
         message: 'hello world',
       };
-    //   auth:{username: INTOUCH_USERNAME, password: INTOUCH_PASSWORD}
+      //   auth:{username: INTOUCH_USERNAME, password: INTOUCH_PASSWORD}
       const send = await request(INTOUCH_API_URL, data);
       console.log(send);
     } catch (error) {
-        console.log(error);
+      console.log(error);
       return response.errorResponse({ res, status: 500, data: response.serverError('an error occurred try again.') });
     }
   }

@@ -15,4 +15,4 @@ export class SubscriptionHelper {
     return [phoneSchema];
   }
 }
-export default new SubscriptionCtrl();
+export default new SubscriptionHelper();
