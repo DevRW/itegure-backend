@@ -27,5 +27,13 @@ export class UserService {
     const find = await user.findOne(query);
     return find;
   }
+
+  async updateInformation(data, userId) {
+    const { username, avatar } = data;
+    await user.update({ username, avatar }, { where: { id: userId } });
+    return {
+      message: 'updated successfully.',
+    };
+  }
 }
 export default new UserService();

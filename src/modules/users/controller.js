@@ -85,5 +85,19 @@ export class UserCtrl {
       });
     }
   }
+
+  async updateInformation(req, res) {
+    try {
+      const { id } = req.user;
+      const change = await userService.updateInformation(req.body, id);
+      return response.successResponse({ res, status: 200, data: change });
+    } catch (error) {
+      return response.errorResponse({
+        res,
+        status: 500,
+        data: response.serverError('an error occured while updating information'),
+      });
+    }
+  }
 }
 export default new UserCtrl();

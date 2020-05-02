@@ -39,6 +39,13 @@ export class UserHelper {
       username,
     };
   }
+  /**
+   * update user information
+   */
+  updateInformation() {
+    const { usernameSchema } = this.schemaValidation();
+    return [usernameSchema];
+  }
 }
 
 export default new UserHelper();
