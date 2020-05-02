@@ -3,7 +3,7 @@ import bodyParser from 'body-parser';
 import morgan from 'morgan';
 import cors from 'cors';
 import passport from 'passport';
-import routes from './src/modules/setup.routes';
+import routes from './src/modules/setups/routes.setup';
 const isProduction = process.env.NODE_ENV === 'production';
 const app = express();
 const PORT = process.env.PORT || 5000;
