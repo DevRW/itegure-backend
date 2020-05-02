@@ -4,6 +4,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 import passport from 'passport';
 import routes from './src/modules/setups/routes.setup';
+import authMiddl from './src/modules/auths/middleware';
 const isProduction = process.env.NODE_ENV === 'production';
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -22,6 +23,7 @@ app.use(
 app.use(bodyParser.json({ limit: '500mb' }));
 //passport
 app.use(passport.initialize());
+authMiddl.authenticateWithJwt();
 
 // route setup
 app.use(routes);
