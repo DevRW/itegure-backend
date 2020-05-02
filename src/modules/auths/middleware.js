@@ -47,8 +47,8 @@ export class AuthMiddleware {
           });
         }
         if (user) {
-          const { id, username, email, avatar, roles } = user;
-          req.user = { id, username, email, avatar, roles };
+          const { id, username, email, avatar, roles, createdAt } = user;
+          req.user = { id, username, email, avatar, roles, createdAt };
           return next();
         }
       })(req, res, next);

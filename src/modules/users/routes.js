@@ -14,4 +14,7 @@ app.post('/signin', userCtrl.login);
 // update
 app.put('/update', authMiddl.isAuth, userHelper.updateInformation(), userMiddl.validator, userCtrl.updateInformation);
 
+// get current profile
+app.get('/read/myprofile', authMiddl.isAuth, userCtrl.profile);
+
 export default app;

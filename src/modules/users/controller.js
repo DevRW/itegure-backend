@@ -99,5 +99,17 @@ export class UserCtrl {
       });
     }
   }
+
+  async profile(req, res) {
+    try {
+      return response.successResponse({ res, status: 200, data: req.user });
+    } catch (error) {
+      return response.errorResponse({
+        res,
+        status: 500,
+        data: response.serverError('an error occured try again'),
+      });
+    }
+  }
 }
 export default new UserCtrl();
