@@ -1,0 +1,35 @@
+{
+    "extends": ["plugin:prettier/recommended"],
+    "plugins": ["prettier"],
+    "env": {
+     "node": true,
+     "es6": true
+    },
+    "parserOptions": {
+        "ecmaVersion": 2018,
+        "sourceType": "module"
+    },
+    "rules": {
+        "prettier/prettier": "error",
+        "no-alert":"error",
+        "comma-dangle":[
+            "error",{
+                "arrays": "always-multiline",
+                "exports": "always-multiline",
+                "functions": "never",
+                "imports": "always-multiline",
+                "objects": "only-multiline"
+            }
+        ],
+        "quotes":["error","single", { "allowTemplateLiterals": true }],
+        "no-console":"error",
+        "require-await":"off",
+        "space-before-function-paren":[
+            "warn",{
+              "anonymous": "never",
+              "asyncArrow": "always",
+              "named": "never"
+            }
+          ]
+    }
+}
