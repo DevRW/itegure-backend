@@ -109,7 +109,7 @@ export class UserCtrl {
       const { id } = req.user;
       const { oldPassword, password } = req.body;
       const find = await userService.findOne({ where: { id } });
-      const comparePassword = generateHelper.decryptPassword(find.password, oldPassword);
+      const comparePassword = generateHelper.decryptPassword({ hash: find.password, password: oldPassword });
       if (!comparePassword) {
         return response.errorResponse({
           res,
@@ -123,7 +123,7 @@ export class UserCtrl {
       return response.errorResponse({
         res,
         status: 500,
-        data: response.serverError('an error occured while updating information'),
+        data: response.serverError('an error occured while changing password'),
       });
     }
   }

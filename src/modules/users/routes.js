@@ -24,5 +24,11 @@ app.put(
 app.get('/read/myprofile', authMiddl.isAuth, userCtrl.profile);
 
 // change password
-app.put('/update/password', isAuth, userHelper.changePassword(), userMiddl.validator, userCtrl.changePassword);
+app.put(
+  '/update/password',
+  authMiddl.isAuth,
+  userHelper.changePassword(),
+  userMiddl.validator,
+  userCtrl.changePassword
+);
 export default app;

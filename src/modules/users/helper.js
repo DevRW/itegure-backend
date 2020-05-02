@@ -44,8 +44,8 @@ export class UserHelper {
    * update user information
    */
   updateInformation() {
-    const { usernameSchema, passwordSchema } = this.schemaValidation();
-    return [usernameSchema, passwordSchema];
+    const { usernameSchema } = this.schemaValidation();
+    return [usernameSchema];
   }
   // password validation schema
   changePassword() {
