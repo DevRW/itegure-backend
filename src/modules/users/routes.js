@@ -12,9 +12,17 @@ app.post('/signup', userHelper.signupSchemas(), userMiddl.validator, userCtrl.cr
 app.post('/signin', userCtrl.login);
 
 // update
-app.put('/update', authMiddl.isAuth, userHelper.updateInformation(), userMiddl.validator, userCtrl.updateInformation);
+app.put(
+  '/update/information',
+  authMiddl.isAuth,
+  userHelper.updateInformation(),
+  userMiddl.validator,
+  userCtrl.updateInformation
+);
 
 // get current profile
 app.get('/read/myprofile', authMiddl.isAuth, userCtrl.profile);
 
+// change password
+app.put('/update/password', isAuth, userHelper.changePassword(), userMiddl.validator, userCtrl.changePassword);
 export default app;

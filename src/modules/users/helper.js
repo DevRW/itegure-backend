@@ -18,6 +18,7 @@ export class UserHelper {
           return value.length !== 0;
         })
         .withMessage('select some of the provided types'),
+      oldPasswordSchema: check('oldPassword').notEmpty().withMessage('old password is required'),
     };
   }
   /**
@@ -43,8 +44,13 @@ export class UserHelper {
    * update user information
    */
   updateInformation() {
-    const { usernameSchema } = this.schemaValidation();
-    return [usernameSchema];
+    const { usernameSchema, passwordSchema } = this.schemaValidation();
+    return [usernameSchema, passwordSchema];
+  }
+  // password validation schema
+  changePassword() {
+    const { oldPasswordSchema, passwordSchema } = this.schemaValidation();
+    return [oldPasswordSchema, passwordSchema];
   }
 }
 

@@ -9,10 +9,9 @@ const { SECRET_OR_KEY } = process.env;
 export class UserCtrl {
   async createAccount(req, res) {
     try {
-      const { username, email, phoneNumber } = req.body;
+      const { username, email } = req.body;
       const verifyUsername = await userService.findOne({ where: { username } });
       const verifyEmail = await userService.findOne({ where: { email } });
-      const verifyPhoneNumber = await userService.findOne({ where: { phoneNumber } });
       if (verifyUsername) {
         return response.errorResponse({
           res,
@@ -25,13 +24,6 @@ export class UserCtrl {
           res,
           status: 409,
           data: response.customValidationMessage({ msg: 'email already exist', param: 'email' }),
-        });
-      }
-      if (verifyPhoneNumber) {
-        return response.errorResponse({
-          res,
-          status: 409,
-          data: response.customValidationMessage({ msg: 'phone number already used', param: 'phoneNumber' }),
         });
       }
       // save new user
@@ -52,7 +44,7 @@ export class UserCtrl {
     try {
       const { password, email } = req.body;
       const unauthorizedMessage = 'the provided information are incorrect';
-      const find = await userService.findOne({ where: or({ email }, { phoneNumber: email }) });
+      const find = await userService.findOne({ where: { email } });
       if (find) {
         const { username, roles } = find;
         const comparePassword = generateHelper.decryptPassword({ hash: find.password, password });
@@ -108,6 +100,30 @@ export class UserCtrl {
         res,
         status: 500,
         data: response.serverError('an error occured try again'),
+      });
+    }
+  }
+
+  async changePassword(req, res) {
+    try {
+      const { id } = req.user;
+      const { oldPassword, password } = req.body;
+      const find = await userService.findOne({ where: { id } });
+      const comparePassword = generateHelper.decryptPassword(find.password, oldPassword);
+      if (!comparePassword) {
+        return response.errorResponse({
+          res,
+          status: 409,
+          data: response.customValidationMessage({ msg: 'old password does not match', param: 'oldPassword' }),
+        });
+      }
+      const change = await userService.changePassword({ password }, id);
+      return response.successResponse({ res, status: 200, data: change });
+    } catch (error) {
+      return response.errorResponse({
+        res,
+        status: 500,
+        data: response.serverError('an error occured while updating information'),
       });
     }
   }

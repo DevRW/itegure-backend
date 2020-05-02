@@ -29,8 +29,15 @@ export class UserService {
   }
 
   async updateInformation(data, userId) {
-    const { username, avatar } = data;
+    const { username, avatar, password } = data;
     await user.update({ username, avatar }, { where: { id: userId } });
+    return {
+      message: 'updated successfully.',
+    };
+  }
+  async changePassword(data, userId) {
+    const { password } = data;
+    await user.update({ password: generate.encryptPassword(password) }, { where: { id: userId } });
     return {
       message: 'updated successfully.',
     };
