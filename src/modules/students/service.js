@@ -22,5 +22,10 @@ export class StudentService {
       message: 'updated successfully',
     };
   }
+
+  async findStudent(studentId) {
+    const find = await student.find({ where: { studentId } });
+    return find;
+  }
 }
 export default new StudentService();
