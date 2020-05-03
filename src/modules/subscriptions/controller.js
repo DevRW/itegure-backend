@@ -83,5 +83,13 @@ export class SubscriptionCtrl {
       return response.errorResponse({ res, status: 500, data: response.serverError('an error occurred try again.') });
     }
   }
+
+  async currentSubscriberProfile(req, res) {
+    try {
+      return response.successResponse({ res, status: 200, data: { profile: req.subscriber } });
+    } catch (error) {
+      return response.errorResponse({ res, status: 500, data: response.serverError('an error occurred try again.') });
+    }
+  }
 }
 export default new SubscriptionCtrl();
