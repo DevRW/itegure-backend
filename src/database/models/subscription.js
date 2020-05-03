@@ -9,7 +9,7 @@ export default (Sequelize, DataType) => {
         autoIncrement: true,
       },
       name: { type: DataType.STRING, allowNull: false },
-      phoneNumber: { type: DataType.INTEGER, allowNull: false },
+      phoneNumber: { type: DataType.STRING, allowNull: false },
     },
     {}
   );

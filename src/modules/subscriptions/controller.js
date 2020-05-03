@@ -9,15 +9,13 @@ export class SubscriptionCtrl {
   async createSubscription(req, res) {
     try {
       const { phoneNumber, name } = req.body;
-      const create = await subscriptionService.createSubscription({ phoneNumber, name });
-      if (create) {
-        await subscriptionService.createVerificationCode(create.phoneNumber);
-        return response.successResponse({
-          res,
-          status: 201,
-          data: { message: 'please verify code we have sent on your mobile phone' },
-        });
-      }
+      const { subscription } = await subscriptionService.createSubscription({ phoneNumber, name });
+      await subscriptionService.createVerificationCode(subscription.phoneNumber);
+      return response.successResponse({
+        res,
+        status: 201,
+        data: { message: 'check verification code we have sent on your mobile phone' },
+      });
     } catch (error) {
       return response.errorResponse({ res, status: 500, data: response.serverError('an error occurred try again.') });
     }
@@ -43,17 +41,20 @@ export class SubscriptionCtrl {
           data: response.authError('failed, the provided information does not match to our records'),
         });
       }
-      //generate auth token
-      const token = generate.generateToken({
-        secret: SUBSCRIPTION_SECRET_KEY,
-        payload: generate.subscriptionPayload(checkSubscription),
-        time: '4h',
-      });
-      return response.successResponse({
-        res,
-        status: 200,
-        data: { token, message: `welcome back ${checkSubscription.name}` },
-      });
+      //update verification
+      if (await subscriptionService.updateVerificationCode(code, phoneNumber)) {
+        //generate auth token
+        const token = generate.generateToken({
+          secret: SUBSCRIPTION_SECRET_KEY,
+          payload: generate.subscriptionPayload(checkSubscription),
+          time: '4h',
+        });
+        return response.successResponse({
+          res,
+          status: 200,
+          data: { token, message: `welcome back ${checkSubscription.name}` },
+        });
+      }
     } catch (error) {
       return response.errorResponse({ res, status: 500, data: response.serverError('an error occurred try again.') });
     }
@@ -70,7 +71,14 @@ export class SubscriptionCtrl {
           data: response.authError('failed, the provided information does not match to our records'),
         });
       }
-      return response.successResponse({ res, status: 200, data: { phoneNumber: find.phoneNumber } });
+      // send verification code
+      if (await subscriptionService.createVerificationCode(find.phoneNumber)) {
+        return response.successResponse({
+          res,
+          status: 200,
+          data: { phoneNumber: find.phoneNumber, message: 'check verification code we have sent on your mobile phone' },
+        });
+      }
     } catch (error) {
       return response.errorResponse({ res, status: 500, data: response.serverError('an error occurred try again.') });
     }

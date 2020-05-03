@@ -4,7 +4,7 @@ export default (Sequelize, DataType) => {
     'verification',
     {
       verificationId: { type: DataType.INTEGER, allowNull: false, primaryKey: true, autoIncrement: true },
-      phoneNumber: { type: DataType.INTEGER, allowNull: false },
+      phoneNumber: { type: DataType.STRING, allowNull: false },
       code: { type: DataType.INTEGER, allowNull: false },
       status: {
         type: DataType.STRING(DataType.ENUM(verificationStatus)),

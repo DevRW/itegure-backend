@@ -12,9 +12,10 @@ export class SubscriptionService {
     };
   }
   async createSubscription(data) {
-    await subscription.create(data);
+    const create = await subscription.create(data);
     return {
       message: 'account created successfully',
+      subscription: create,
     };
   }
 
@@ -28,6 +29,13 @@ export class SubscriptionService {
   async findOneSubscription(phoneNumber) {
     const find = await subscription.findOne({ where: { phoneNumber } });
     return find;
+  }
+
+  async updateVerificationCode(code, phoneNumber) {
+    await verification.update({ status: verificationStatus[1] }, { where: and({ phoneNumber }, { code }) });
+    return {
+      message: 'updated successfully',
+    };
   }
 }
 export default new SubscriptionService();
