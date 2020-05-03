@@ -9,7 +9,6 @@ export class ClassStudiesController {
       const newClass = await classStudyService.register({ name: trimedName });
       return response.successResponse({ res, status: 201, data: newClass });
     } catch (error) {
-      console.log('====>', error);
       return response.errorResponse({ res, status: 500, data: response.serverError('something wrong') });
     }
   }
