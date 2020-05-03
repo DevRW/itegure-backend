@@ -15,7 +15,10 @@ export class SubjectsMiddleware {
         return response.errorResponse({
           res,
           status: 400,
-          data: response.customValidationMessage({ msg: 'Subject could not be found', param: 'id' }),
+          data: response.customValidationMessage({
+            msg: 'Subject could not be found',
+            param: 'id',
+          }),
         });
       }
       next();

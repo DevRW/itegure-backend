@@ -9,13 +9,20 @@ export class ClassStudiesMiddleware {
    */
   async checkIfClassExist(req, res, next) {
     try {
-      const { id } = req.params;
-      const verifyId = await classStudyService.findOne({ where: { id } });
+      const { id, studentId } = req.params;
+      const createStudentUrl = '/api/v1/students/create-student';
+      const updateStudentUrl = `/api/v1/students/update-student/${studentId}`;
+      const manageURL =
+        req.originalUrl === createStudentUrl || req.originalUrl === updateStudentUrl ? req.body.classStudy : id;
+      const verifyId = await classStudyService.findOne({ where: { id: manageURL } });
       if (!verifyId) {
         return response.errorResponse({
           res,
           status: 400,
-          data: response.customValidationMessage({ msg: 'Class could not be found', param: 'id' }),
+          data: response.customValidationMessage({
+            msg: 'Class could not be found',
+            param: req.originalUrl === createStudentUrl || req.originalUrl === updateStudentUrl ? 'classStudy' : 'id',
+          }),
         });
       }
       next();

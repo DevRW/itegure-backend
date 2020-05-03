@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import codeGenerator from 'node-code-generator';
 export class Generate {
   /**
    *
@@ -28,6 +29,20 @@ export class Generate {
   decryptPassword({ hash, password }) {
     const decrypt = bcrypt.compareSync(password, hash);
     return decrypt;
+  }
+
+  generateCode() {
+    const generator = new codeGenerator();
+    const code = generator.generateCodes('#+', 5);
+    return `${code[0]}${code[1]}${code[2]}${code[3]}${code[4]}`;
+  }
+
+  subscriptionPayload(subscription) {
+    const { subscriptionId, phoneNumber } = subscription;
+    return {
+      subscriptionId,
+      phoneNumber,
+    };
   }
 }
 export default new Generate();
