@@ -6,18 +6,6 @@ dotenv.config();
 
 const { SUBSCRIPTION_SECRET_KEY } = process.env;
 export class SubscriptionCtrl {
-  async verification(req, res) {
-    try {
-      const { phoneNumber } = req.body;
-      const data = {
-        recipients: phoneNumber,
-        sender: 'KSE',
-        message: 'hello world',
-      };
-    } catch (error) {
-      return response.errorResponse({ res, status: 500, data: response.serverError('an error occurred try again.') });
-    }
-  }
   async createSubscription(req, res) {
     try {
       const { phoneNumber, name } = req.body;
@@ -34,7 +22,8 @@ export class SubscriptionCtrl {
       return response.errorResponse({ res, status: 500, data: response.serverError('an error occurred try again.') });
     }
   }
-  async authenticateUser(req, res) {
+
+  async authenticateSubscriber(req, res) {
     try {
       const { code, phoneNumber } = req.body;
       const find = await subscriptionService.findPendingVerificationCode(phoneNumber, code);
@@ -65,6 +54,23 @@ export class SubscriptionCtrl {
         status: 200,
         data: { token, message: `welcome back ${checkSubscription.name}` },
       });
+    } catch (error) {
+      return response.errorResponse({ res, status: 500, data: response.serverError('an error occurred try again.') });
+    }
+  }
+
+  async login(req, res) {
+    try {
+      const { phoneNumber } = req.body;
+      const find = await subscriptionService.findOneSubscription(phoneNumber);
+      if (!find) {
+        return response.errorResponse({
+          res,
+          status: 401,
+          data: response.authError('failed, the provided information does not match to our records'),
+        });
+      }
+      return response.successResponse({ res, status: 200, data: { phoneNumber: find.phoneNumber } });
     } catch (error) {
       return response.errorResponse({ res, status: 500, data: response.serverError('an error occurred try again.') });
     }
