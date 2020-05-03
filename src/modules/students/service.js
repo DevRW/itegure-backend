@@ -5,8 +5,8 @@ const { student } = models;
 
 export class StudentService {
   async assignStudent(data) {
-    const { subscriberId, name, subject, classStudy, school } = data;
-    await student.create({ subscriberId, name, subjectId: subject, classId: classStudy, school });
+    const { subscriberId, name, classStudy, school } = data;
+    await student.create({ subscriberId, name, classId: classStudy, school });
     return {
       message: 'action performed successfully.',
     };
@@ -19,8 +19,8 @@ export class StudentService {
   }
 
   async updateStudent(studentId, subscriberId, data) {
-    const { name, school } = data;
-    await student.update({ name, school }, { where: and({ studentId }, { subscriberId }) });
+    const { name, school, classStudy } = data;
+    await student.update({ name, school, classId: classStudy }, { where: and({ studentId }, { subscriberId }) });
     return {
       message: 'updated successfully',
     };

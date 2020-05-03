@@ -5,7 +5,6 @@ export default {
       name: { type: Sequelize.STRING, allowNull: false },
       school: { type: Sequelize.STRING },
       subscriberId: { type: Sequelize.INTEGER, allowNull: false },
-      subjectId: { type: Sequelize.INTEGER, allowNull: false },
       classId: { type: Sequelize.INTEGER, allowNull: false },
       createdAt: { type: Sequelize.DATE, allowNull: false, defaultValue: Date.now() },
       updatedAt: { type: Sequelize.DATE, allowNull: false, defaultValue: Date.now() },

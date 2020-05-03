@@ -5,7 +5,7 @@ import userMiddlr from '../users/middleware';
 import studentMiddlr from './middleware';
 import authMiddl from '../auths/middleware';
 import classMiddl from '../classStudies/middleware';
-import subjectMiddl from '../subjects/middleware';
+
 const app = express.Router();
 
 // POST - create student
@@ -15,7 +15,6 @@ app.post(
   studentHelper.addStudent(),
   userMiddlr.validator,
   classMiddl.checkIfClassExist,
-  subjectMiddl.checkIfSubjectExist,
   studentCtrl.assignStudent
 );
 
@@ -27,7 +26,6 @@ app.put(
   studentHelper.addStudent(),
   userMiddlr.validator,
   classMiddl.checkIfClassExist,
-  subjectMiddl.checkIfSubjectExist,
   studentCtrl.updateStudent
 );
 
