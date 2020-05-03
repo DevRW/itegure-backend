@@ -2,7 +2,7 @@ export default (Sequelize, DataType) => {
   return Sequelize.define(
     'subscription',
     {
-      subscription_id: {
+      subscriptionId: {
         type: DataType.INTEGER,
         allowNull: false,
         primaryKey: true,

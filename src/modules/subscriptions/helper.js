@@ -5,7 +5,8 @@ export class SubscriptionHelper {
       phoneSchema: check('phoneNumber')
         .notEmpty()
         .isLength({ min: 10, max: 10 })
-        .withMessage('phone number must be 10 characted'),
+        .isNumeric()
+        .withMessage('phone number must be 10 numbers'),
       name: check('name').notEmpty().withMessage('name is required'),
     };
   }
