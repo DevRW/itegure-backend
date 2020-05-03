@@ -25,6 +25,7 @@ export default (Sequelize, DataTypes) => {
   );
   station.associate = (models) => {
     // associations can be defined here
+    station.hasMany(models.timetable, { foreignKey: 'station', allowNull: false });
   };
   return station;
 };

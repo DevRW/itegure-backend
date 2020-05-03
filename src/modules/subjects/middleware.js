@@ -10,14 +10,18 @@ export class SubjectsMiddleware {
   async checkIfSubjectExist(req, res, next) {
     try {
       const { id } = req.params;
-      const verifyId = await subjectService.findOne({ where: { id } });
+      const createTimeTableUrl = '/api/v1/timetable';
+      const updateTimeTableUrl = `/api/v1/timetable/${id}`;
+      const manageURL =
+        req.originalUrl === createTimeTableUrl || req.originalUrl === updateTimeTableUrl ? req.body.subject : id;
+      const verifyId = await subjectService.findOne({ where: { id: manageURL } });
       if (!verifyId) {
         return response.errorResponse({
           res,
           status: 400,
           data: response.customValidationMessage({
             msg: 'Subject could not be found',
-            param: 'id',
+            param: req.originalUrl === createTimeTableUrl || req.originalUrl === updateTimeTableUrl ? 'subject' : 'id',
           }),
         });
       }

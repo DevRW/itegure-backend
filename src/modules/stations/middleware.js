@@ -10,12 +10,19 @@ export class StationMiddleware {
   async checkIfStationExist(req, res, next) {
     try {
       const { id } = req.params;
-      const verifyId = await stationService.findOne({ where: { id } });
+      const createTimeTableUrl = '/api/v1/timetable';
+      const updateTimeTableUrl = `/api/v1/timetable/${id}`;
+      const manageURL =
+        req.originalUrl === createTimeTableUrl || req.originalUrl === updateTimeTableUrl ? req.body.station : id;
+      const verifyId = await stationService.findOne({ where: { id: manageURL } });
       if (!verifyId) {
         return response.errorResponse({
           res,
           status: 400,
-          data: response.customValidationMessage({ msg: 'Station could not be found', param: 'id' }),
+          data: response.customValidationMessage({
+            msg: 'Station could not be found',
+            param: req.originalUrl === createTimeTableUrl || req.originalUrl === updateTimeTableUrl ? 'station' : 'id',
+          }),
         });
       }
       next();

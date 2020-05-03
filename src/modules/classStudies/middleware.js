@@ -12,8 +12,15 @@ export class ClassStudiesMiddleware {
       const { id, studentId } = req.params;
       const createStudentUrl = '/api/v1/students/create-student';
       const updateStudentUrl = `/api/v1/students/update-student/${studentId}`;
+      const createTimeTableUrl = '/api/v1/timetable';
+      const updateTimeTableUrl = `/api/v1/timetable/${id}`;
       const manageURL =
-        req.originalUrl === createStudentUrl || req.originalUrl === updateStudentUrl ? req.body.classStudy : id;
+        req.originalUrl === createStudentUrl ||
+        req.originalUrl === updateStudentUrl ||
+        req.originalUrl === createTimeTableUrl ||
+        req.originalUrl === updateTimeTableUrl
+          ? req.body.classStudy
+          : id;
       const verifyId = await classStudyService.findOne({ where: { id: manageURL } });
       if (!verifyId) {
         return response.errorResponse({
@@ -21,7 +28,13 @@ export class ClassStudiesMiddleware {
           status: 400,
           data: response.customValidationMessage({
             msg: 'Class could not be found',
-            param: req.originalUrl === createStudentUrl || req.originalUrl === updateStudentUrl ? 'classStudy' : 'id',
+            param:
+              req.originalUrl === createStudentUrl ||
+              req.originalUrl === updateStudentUrl ||
+              req.originalUrl === createTimeTableUrl ||
+              req.originalUrl === updateTimeTableUrl
+                ? 'classStudy'
+                : 'id',
           }),
         });
       }
