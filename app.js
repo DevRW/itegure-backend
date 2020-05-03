@@ -20,8 +20,7 @@ app.use(
     parameterLimit: 500000,
   })
 );
-app.use(bodyParser.json({ limit: '500mb' }));
-app.use(express.json());
+app.use(bodyParser.json());
 //passport
 app.use(passport.initialize());
 authMiddl.authenticateWithJwt();
