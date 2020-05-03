@@ -30,5 +30,8 @@ export class StudentService {
     const find = await student.findOne({ where: { studentId } });
     return find;
   }
+  async findOne(query) {
+    return await student.findOne(query);
+  }
 }
 export default new StudentService();
