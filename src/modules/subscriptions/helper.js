@@ -8,11 +8,7 @@ export class SubscriptionHelper {
         .isNumeric()
         .withMessage('phone number must be 10 numbers'),
       nameSchema: check('name').notEmpty().withMessage('name is required'),
-      codeSchema: check('code')
-        .notEmpty()
-        .isLength({ min: 5, max: 5 })
-        .isNumeric()
-        .withMessage('code must be 5 numbers'),
+      codeSchema: check('code').notEmpty().isNumeric().withMessage('code is required'),
     };
   }
 
