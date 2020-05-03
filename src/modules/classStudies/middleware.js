@@ -9,9 +9,9 @@ export class ClassStudiesMiddleware {
    */
   async checkIfClassExist(req, res, next) {
     try {
-      const { id } = req.params;
+      const { id, studentId } = req.params;
       const createStudentUrl = '/api/v1/students/create-student';
-      const updateStudentUrl = '/api/v1/students/update-student';
+      const updateStudentUrl = `/api/v1/students/update-student/${studentId}`;
       const manageURL =
         req.originalUrl === createStudentUrl || req.originalUrl === updateStudentUrl ? req.body.classStudy : id;
       const verifyId = await classStudyService.findOne({ where: { id: manageURL } });

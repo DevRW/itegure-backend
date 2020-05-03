@@ -32,6 +32,11 @@ app.put(
 );
 
 // DELETE - Delete stuent
-app.delete('/delete-student/:studentId', studentMiddlr.checkStudentId, studentCtrl.deleteStudent);
+app.delete(
+  '/delete-student/:studentId',
+  authMiddl.isSubscriberAuth,
+  studentMiddlr.checkStudentId,
+  studentCtrl.deleteStudent
+);
 
 export default app;

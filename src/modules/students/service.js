@@ -13,6 +13,9 @@ export class StudentService {
   }
   async removeStudent(studentId, subscriberId) {
     await student.destroy({ where: and({ subscriberId }, { studentId }) });
+    return {
+      message: 'deleted successfully',
+    };
   }
 
   async updateStudent(studentId, subscriberId, data) {
@@ -24,7 +27,7 @@ export class StudentService {
   }
 
   async findStudent(studentId) {
-    const find = await student.find({ where: { studentId } });
+    const find = await student.findOne({ where: { studentId } });
     return find;
   }
 }

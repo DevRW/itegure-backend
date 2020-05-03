@@ -5,7 +5,7 @@ export class StudentControler {
   async assignStudent(req, res) {
     try {
       const { subscriptionId } = req.subscriber;
-      const create = await studentService.assignStudent({ ...req.body, subscriptionId });
+      const create = await studentService.assignStudent({ ...req.body, subscriberId: subscriptionId });
       return response.successResponse({ res, status: 201, data: create });
     } catch (error) {
       return response.errorResponse({
