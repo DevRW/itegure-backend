@@ -10,12 +10,19 @@ export class SubjectsMiddleware {
   async checkIfSubjectExist(req, res, next) {
     try {
       const { id } = req.params;
-      const verifyId = await subjectService.findOne({ where: { id } });
+      const createStudentUrl = '/api/v1/students/create-student';
+      const updateStudentUrl = '/api/v1/students/update-student';
+      const manageURL =
+        req.originalUrl === createStudentUrl || req.originalUrl === updateStudentUrl ? req.body.subject : id;
+      const verifyId = await subjectService.findOne({ where: { id: manageURL } });
       if (!verifyId) {
         return response.errorResponse({
           res,
           status: 400,
-          data: response.customValidationMessage({ msg: 'Subject could not be found', param: 'id' }),
+          data: response.customValidationMessage({
+            msg: 'Subject could not be found',
+            param: req.originalUrl === createStudentUrl || req.originalUrl === updateStudentUrl ? 'subject' : 'id',
+          }),
         });
       }
       next();

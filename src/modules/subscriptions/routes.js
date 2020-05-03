@@ -3,6 +3,7 @@ import subscriptionCtrl from './controller';
 import subscriptionHelper from './helper';
 import userMiddl from '../users/middleware';
 import subscriptionMiddl from './middleware';
+
 const app = express.Router();
 
 //POST - Create subscription

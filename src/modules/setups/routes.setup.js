@@ -4,7 +4,7 @@ import classes from '../classStudies/routes';
 import stations from '../stations/routes';
 import subjects from '../subjects/routes';
 import subscriptions from '../subscriptions/routes';
-import students from '../subscriptions/routes';
+import students from '../students/routes';
 
 const app = express.Router();
 

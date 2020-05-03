@@ -37,5 +37,9 @@ export class SubscriptionService {
       message: 'updated successfully',
     };
   }
+  async findBySubscriptionId(subscriptionId) {
+    const find = await subscription.findOne({ where: { subscriptionId } });
+    return find;
+  }
 }
 export default new SubscriptionService();
