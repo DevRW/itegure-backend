@@ -45,5 +45,19 @@ export class StudentControler {
       });
     }
   }
+
+  async findAllStudent(req, res) {
+    try {
+      const { subscriptionId } = req.subscriber;
+      const find = await studentService.getAllStudentOfGivenParent(subscriptionId);
+      return response.successResponse({ res, status: 200, data: find });
+    } catch (error) {
+      return response.errorResponse({
+        res,
+        status: 500,
+        data: response.serverError('something wrong please try again.'),
+      });
+    }
+  }
 }
 export default new StudentControler();

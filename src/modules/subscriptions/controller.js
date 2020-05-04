@@ -85,12 +85,12 @@ export class SubscriptionCtrl {
         // send verification code
         const body = `Your verification code is ${verification.code}`;
         await generate.generateMessage({ body, from: TWILIO_PHONE_NUMBER, to: find.phoneNumber });
+        return response.successResponse({
+          res,
+          status: 200,
+          data: { phoneNumber, message: 'check verification code we have sent on your mobile phone' },
+        });
       }
-      return response.successResponse({
-        res,
-        status: 200,
-        data: { phoneNumber, message: 'check verification code we have sent on your mobile phone' },
-      });
     } catch (error) {
       return response.errorResponse({ res, status: 500, data: response.serverError('an error occurred try again.') });
     }
@@ -109,10 +109,15 @@ export class SubscriptionCtrl {
       const { phoneNumber } = req.subscriber;
       const { verification } = await subscriptionService.createVerificationCode(phoneNumber);
       if (verification) {
+        const body = `your verification code is ${verification.code}`;
+        await generate.generateMessage({ body, from: TWILIO_PHONE_NUMBER, to: phoneNumber });
         return response.successResponse({
           res,
           status: 200,
-          data: { phoneNumber: find.phoneNumber, message: 'check verification code we have sent on your mobile phone' },
+          data: {
+            phoneNumber: verification.phoneNumber,
+            message: 'check verification code we have sent on your mobile phone',
+          },
         });
       }
     } catch (error) {
@@ -124,6 +129,14 @@ export class SubscriptionCtrl {
     try {
       const { phoneNumber, subscriptionId } = req.subscriber;
       const { code } = req.body;
+      const find = await subscriptionService.findPendingVerificationCode(phoneNumber, code);
+      if (!find) {
+        return response.errorResponse({
+          res,
+          status: 401,
+          data: response.authError('failed, the provided information does not match'),
+        });
+      }
       const remove = await subscriptionService.unsubscription(subscriptionId);
       //update verification
       if (remove) {

@@ -26,5 +26,9 @@ export class SubscriptionHelper {
     const { phoneSchema, codeSchema } = this.schema();
     return [codeSchema, phoneSchema];
   }
+  code() {
+    const { codeSchema } = this.schema();
+    return [codeSchema];
+  }
 }
 export default new SubscriptionHelper();
