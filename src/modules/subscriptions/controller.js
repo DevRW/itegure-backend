@@ -4,18 +4,26 @@ import generate from '../generates/generate';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const { SUBSCRIPTION_SECRET_KEY } = process.env;
+const { SUBSCRIPTION_SECRET_KEY, TWILIO_PHONE_NUMBER, RWANDA_CODE } = process.env;
 export class SubscriptionCtrl {
   async createSubscription(req, res) {
     try {
       const { phoneNumber, name } = req.body;
-      const { subscription } = await subscriptionService.createSubscription({ phoneNumber, name });
-      await subscriptionService.createVerificationCode(subscription.phoneNumber);
-      return response.successResponse({
-        res,
-        status: 201,
-        data: { message: 'check verification code we have sent on your mobile phone' },
+      const { subscription } = await subscriptionService.createSubscription({
+        phoneNumber: `${RWANDA_CODE}${phoneNumber}`,
+        name,
       });
+      const { verification } = await subscriptionService.createVerificationCode(subscription.phoneNumber);
+      if (verification) {
+        // send verification code
+        const body = `your verification code is ${verification.code}`;
+        await generate.generateMessage({ body, from: TWILIO_PHONE_NUMBER, to: subscription.phoneNumber });
+        return response.successResponse({
+          res,
+          status: 201,
+          data: { message: 'check verification code we have sent on your mobile phone', phoneNumber },
+        });
+      }
     } catch (error) {
       return response.errorResponse({ res, status: 500, data: response.serverError('an error occurred try again.') });
     }
@@ -24,7 +32,7 @@ export class SubscriptionCtrl {
   async authenticateSubscriber(req, res) {
     try {
       const { code, phoneNumber } = req.body;
-      const find = await subscriptionService.findPendingVerificationCode(phoneNumber, code);
+      const find = await subscriptionService.findPendingVerificationCode(`${RWANDA_CODE}${phoneNumber}`, code);
       if (!find) {
         return response.errorResponse({
           res,
@@ -42,7 +50,7 @@ export class SubscriptionCtrl {
         });
       }
       //update verification
-      if (await subscriptionService.updateVerificationCode(code, phoneNumber)) {
+      if (await subscriptionService.updateVerificationCode(code, find.phoneNumber)) {
         //generate auth token
         const token = generate.generateToken({
           secret: SUBSCRIPTION_SECRET_KEY,
@@ -63,7 +71,7 @@ export class SubscriptionCtrl {
   async login(req, res) {
     try {
       const { phoneNumber } = req.body;
-      const find = await subscriptionService.findOneSubscription(phoneNumber);
+      const find = await subscriptionService.findOneSubscription(`${RWANDA_CODE}${phoneNumber}`);
       if (!find) {
         return response.errorResponse({
           res,
@@ -71,14 +79,18 @@ export class SubscriptionCtrl {
           data: response.authError('failed, the provided information does not match to our records'),
         });
       }
+      const { verification } = await subscriptionService.createVerificationCode(find.phoneNumber);
       // send verification code
-      if (await subscriptionService.createVerificationCode(find.phoneNumber)) {
-        return response.successResponse({
-          res,
-          status: 200,
-          data: { phoneNumber: find.phoneNumber, message: 'check verification code we have sent on your mobile phone' },
-        });
+      if (verification) {
+        // send verification code
+        const body = `Your verification code is ${verification.code}`;
+        await generate.generateMessage({ body, from: TWILIO_PHONE_NUMBER, to: find.phoneNumber });
       }
+      return response.successResponse({
+        res,
+        status: 200,
+        data: { phoneNumber, message: 'check verification code we have sent on your mobile phone' },
+      });
     } catch (error) {
       return response.errorResponse({ res, status: 500, data: response.serverError('an error occurred try again.') });
     }

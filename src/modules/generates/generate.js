@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import codeGenerator from 'node-code-generator';
+import twilio from 'twilio';
 export class Generate {
   /**
    *
@@ -43,6 +44,15 @@ export class Generate {
       subscriptionId,
       phoneNumber,
     };
+  }
+
+  async generateMessage({ body, from, to }) {
+    const { TWILIO_SID, TWILIO_AUTH_TOKEN } = process.env;
+    const accountSid = TWILIO_SID;
+    const authToken = TWILIO_AUTH_TOKEN;
+    const client = twilio(accountSid, authToken);
+    const send = await client.messages.create({ body, from, to });
+    return send;
   }
 }
 export default new Generate();

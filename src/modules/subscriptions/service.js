@@ -6,9 +6,10 @@ const { subscription, verification } = models;
 
 export class SubscriptionService {
   async createVerificationCode(phoneNumber) {
-    await verification.create({ phoneNumber, code: generate.generateCode() });
+    const create = await verification.create({ phoneNumber, code: generate.generateCode() });
     return {
       message: 'code generated',
+      verification: create,
     };
   }
   async createSubscription(data) {
