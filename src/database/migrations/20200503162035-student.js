@@ -7,7 +7,6 @@ export default {
       subscriberId: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: { model: 'subscriptions', key: 'subscriptionId', onDelete: 'CASCADE' },
       },
       classId: { type: Sequelize.INTEGER, allowNull: false },
       createdAt: { type: Sequelize.DATE, allowNull: false, defaultValue: Date.now() },
