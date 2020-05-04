@@ -91,5 +91,39 @@ export class SubscriptionCtrl {
       return response.errorResponse({ res, status: 500, data: response.serverError('an error occurred try again.') });
     }
   }
+
+  async sendUnsubscribeCode(req, res) {
+    try {
+      const { phoneNumber } = req.subscriber;
+      const { verification } = await subscriptionService.createVerificationCode(phoneNumber);
+      if (verification) {
+        return response.successResponse({
+          res,
+          status: 200,
+          data: { phoneNumber: find.phoneNumber, message: 'check verification code we have sent on your mobile phone' },
+        });
+      }
+    } catch (error) {
+      return response.errorResponse({ res, status: 500, data: response.serverError('an error occurred try again.') });
+    }
+  }
+
+  async unsubscribe(req, res) {
+    try {
+      const { phoneNumber, subscriptionId } = req.subscriber;
+      const { code } = req.body;
+      const remove = await subscriptionService.unsubscription(subscriptionId);
+      //update verification
+      if (remove) {
+        return response.successResponse({
+          res,
+          status: 200,
+          data: remove,
+        });
+      }
+    } catch (error) {
+      return response.errorResponse({ res, status: 500, data: response.serverError('an error occurred try again.') });
+    }
+  }
 }
 export default new SubscriptionCtrl();

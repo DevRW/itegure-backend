@@ -41,5 +41,11 @@ export class SubscriptionService {
     const find = await subscription.findOne({ where: { subscriptionId } });
     return find;
   }
+  async unsubscription(subscriptionId) {
+    await subscription.destroy({ where: { subscriptionId } });
+    return {
+      message: 'unsubscribed successfully',
+    };
+  }
 }
 export default new SubscriptionService();
