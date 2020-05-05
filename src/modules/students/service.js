@@ -1,7 +1,7 @@
 import models from '../../database/models';
 import { and } from 'sequelize';
 
-const { student } = models;
+const { student, classStudy } = models;
 
 export class StudentService {
   async assignStudent(data) {
@@ -32,6 +32,19 @@ export class StudentService {
   }
   async findOne(query) {
     return await student.findOne(query);
+  }
+  async getAllStudentOfGivenParent(subscriptionId) {
+    const query = {
+      where: { subscriberId: subscriptionId },
+      include: [
+        {
+          model: classStudy,
+          as: 'class',
+        },
+      ],
+    };
+    const find = await student.findAll(query);
+    return find;
   }
 }
 export default new StudentService();

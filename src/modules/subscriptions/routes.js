@@ -29,4 +29,16 @@ app.post(
 // GET - Subscriber profile
 app.get('/read-profile', authMiddl.isSubscriberAuth, subscriptionCtrl.currentSubscriberProfile);
 
+// POST - unsubscribe
+app.post('/request-unsubscription', authMiddl.isSubscriberAuth, subscriptionCtrl.sendUnsubscribeCode);
+
+// DELETE unsubscribe
+app.delete(
+  '/unsubscribe',
+  authMiddl.isSubscriberAuth,
+  subscriptionHelper.code(),
+  userMiddl.validator,
+  subscriptionCtrl.unsubscribe
+);
+
 export default app;

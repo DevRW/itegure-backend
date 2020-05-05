@@ -37,4 +37,6 @@ app.delete(
   studentCtrl.deleteStudent
 );
 
+app.get('/read-student/all', authMiddl.isSubscriberAuth, studentCtrl.findAllStudent);
+
 export default app;
