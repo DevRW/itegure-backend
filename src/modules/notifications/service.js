@@ -25,7 +25,7 @@ export class NotificationService {
       ],
     };
     const find = await timetable.findAll(query);
-    return { todayDate: new Date(), data: find.length };
+    return find;
   }
 }
 export default new NotificationService();

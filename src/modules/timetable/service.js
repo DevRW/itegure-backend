@@ -6,14 +6,10 @@ export class timetableServices {
   async register(data) {
     const { generateDate, calculateTimeStamp } = timeTableHelper;
     const { timeFrom, timeTo, date } = data;
-    const timeFromStamp = calculateTimeStamp(generateDate(date, timeFrom));
-    const timeToStamp = calculateTimeStamp(generateDate(date, timeTo));
     const from = `${date} ${timeFrom}`;
     const to = `${date} ${timeTo}`;
     await timetable.create({
       ...data,
-      timeFromStamp,
-      timeToStamp,
       timeFrom: from,
       timeTo: to,
     });

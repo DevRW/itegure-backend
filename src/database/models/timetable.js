@@ -16,15 +16,7 @@ export default (Sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      timeFromStamp: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
       timeTo: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      timeToStamp: {
         type: DataTypes.STRING,
         allowNull: false,
       },
