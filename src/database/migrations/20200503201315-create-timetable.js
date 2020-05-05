@@ -12,11 +12,11 @@ export default {
         allowNull: false,
       },
       timeFrom: {
-        type: Sequelize.TIME,
+        type: Sequelize.STRING,
         allowNull: false,
       },
       timeTo: {
-        type: Sequelize.TIME,
+        type: Sequelize.STRING,
         allowNull: false,
       },
       subject: {

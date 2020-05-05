@@ -1,5 +1,5 @@
 export default (Sequelize, DataType) => {
-  return Sequelize.define(
+  const Subscription = Sequelize.define(
     'subscription',
     {
       subscriptionId: {
@@ -13,4 +13,8 @@ export default (Sequelize, DataType) => {
     },
     {}
   );
+  Subscription.associate = (models) => {
+    Subscription.hasMany(models.student, { foreignKey: 'subscriberId', as: 'parent' });
+  };
+  return Subscription;
 };
