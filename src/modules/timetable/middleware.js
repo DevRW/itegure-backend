@@ -27,8 +27,10 @@ export class TimetableMiddleware {
   async checkIftimetableExist(req, res, next) {
     try {
       const { date, timeFrom, timeTo, subject, classStudy, station } = req.body;
+      const from = `${date} ${timeFrom}`;
+      const to = `${date} ${timeTo}`;
       const verifyTimetable = await timetableService.findOne({
-        where: { date, timeFrom, timeTo, subject, classStudy, station },
+        where: { date, timeFrom: from, timeTo: to, subject, classStudy, station },
       });
       if (verifyTimetable) {
         return response.errorResponse({

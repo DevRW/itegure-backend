@@ -20,7 +20,7 @@
     "new:seed": "./node_modules/.bin/sequelize seed:generate --name",
     "new:model": "./node_modules/.bin/sequelize model:generate --name",
     "migrate:undo:all": "./node_modules/.bin/sequelize db:migrate:undo:all",
-    "migrate:undo":"./node_modules/.bin/sequelize db:migrate:undo --name"
+    "migrate:undo": "./node_modules/.bin/sequelize db:migrate:undo --name"
   },
   "dependencies": {
     "@babel/cli": "^7.8.4",
@@ -40,8 +40,10 @@
     "express-validator": "^6.4.1",
     "gravatar": "^1.8.0",
     "jsonwebtoken": "^8.5.1",
+    "moment": "^2.25.3",
     "morgan": "^1.10.0",
     "node-code-generator": "^1.0.3",
+    "node-cron": "^2.0.3",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "pg": "^8.0.3",

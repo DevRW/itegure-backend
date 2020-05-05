@@ -5,6 +5,7 @@ import cors from 'cors';
 import passport from 'passport';
 import routes from './src/modules/setups/routes.setup';
 import authMiddl from './src/modules/auths/middleware';
+import notificationHelper from './src/modules/notifications/helper';
 const isProduction = process.env.NODE_ENV === 'production';
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -21,6 +22,9 @@ app.use(
   })
 );
 app.use(bodyParser.json());
+
+// cron jon
+notificationHelper.runCron();
 //passport
 app.use(passport.initialize());
 authMiddl.authenticateWithJwt();

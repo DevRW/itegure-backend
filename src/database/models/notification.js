@@ -5,11 +5,11 @@ export default (Sequelize, DataType) => {
     {
       notificationId: { type: DataType.INTEGER, allowNull: false, primaryKey: true, autoIncrement: true },
       message: { type: DataType.TEXT, allowNull: false },
-      timetableId: { type: DataType.INTEGER, allowNull: false, reference: { model: 'timetable', key: 'id' } },
+      timetableId: { type: DataType.INTEGER, allowNull: false, references: { model: 'timetable', key: 'id' } },
       subscriberId: {
         type: DataType.INTEGER,
         allowNull: false,
-        reference: { model: 'subscription', key: 'subscriptionId' },
+        references: { model: 'subscription', key: 'subscriptionId' },
       },
       status: {
         type: DataType.STRING(DataType.ENUM(notificationStatus)),
@@ -23,4 +23,5 @@ export default (Sequelize, DataType) => {
     Notification.belongsTo(model.subscription, { foreignKey: 'subscriberId', as: 'subscription' });
     Notification.belongsTo(model.timetable, { foreignKey: 'timetableId', as: 'timetable' });
   };
+  return Notification;
 };

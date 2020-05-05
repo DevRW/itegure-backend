@@ -13,11 +13,19 @@ export default (Sequelize, DataTypes) => {
         allowNull: false,
       },
       timeFrom: {
-        type: DataTypes.TIME,
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      timeFromStamp: {
+        type: DataTypes.STRING,
         allowNull: false,
       },
       timeTo: {
-        type: DataTypes.TIME,
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      timeToStamp: {
+        type: DataTypes.STRING,
         allowNull: false,
       },
       subject: {

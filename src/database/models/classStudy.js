@@ -18,6 +18,7 @@ export default (Sequelize, DataTypes) => {
   classStudy.associate = (models) => {
     // associations can be defined here
     classStudy.hasMany(models.timetable, { foreignKey: 'classStudy', allowNull: false });
+    classStudy.hasMany(models.student, { foreignKey: 'classId', as: 'class' });
   };
   return classStudy;
 };
