@@ -17,7 +17,6 @@ export class NotificationController {
       const find = await notificationService.findAllNotification();
       return response.successResponse({ res, status: 200, data: find });
     } catch (error) {
-        console.log(error);
       return response.errorResponse({ res, status: 500, data: response.serverError('an error occured, try again') });
     }
   }
