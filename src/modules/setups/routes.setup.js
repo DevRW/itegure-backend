@@ -5,6 +5,7 @@ import stations from '../stations/routes';
 import subjects from '../subjects/routes';
 import subscriptions from '../subscriptions/routes';
 import students from '../students/routes';
+import timetable from '../timetable/routes';
 
 const app = express.Router();
 
@@ -14,5 +15,6 @@ app.use('/api/v1/classes', classes);
 app.use('/api/v1/stations', stations);
 app.use('/api/v1/subjects', subjects);
 app.use('/api/v1/students', students);
+app.use('/api/v1/timetable', timetable);
 
 export default app;
