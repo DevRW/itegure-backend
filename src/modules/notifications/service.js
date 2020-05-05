@@ -3,7 +3,7 @@ import { notificationStatus } from '../../database/models/notification';
 import moment from 'moment';
 import timetableHelper from '../timetable/helper';
 import { and, Op } from 'sequelize';
-const { notification, timetable, subscription, classStudy, station, student } = models;
+const { notification, timetable, subscription, classStudy, station, student, subject } = models;
 export class NotificationService {
   async notifyParent() {
     const { getDate } = timetableHelper;
@@ -25,6 +25,44 @@ export class NotificationService {
       ],
     };
     const find = await timetable.findAll(query);
+    return find;
+  }
+
+  async findSubscriberNotification(subscriptionId) {
+    const query = {
+      where: { subscriberId: subscriptionId },
+      include: [
+        {
+          model: timetable,
+          as: 'timetable',
+          include: [
+            { model: subject, as: 'subjectKeyId' },
+            { model: station, as: 'stationKeyId' },
+            { model: classStudy, as: 'classStudyKeyId' },
+          ],
+        },
+      ],
+    };
+    const find = await notification.findAll(query);
+    return find;
+  }
+
+  async findAllNotification() {
+    const query = {
+      include: [
+        {
+          model: timetable,
+          as: 'timetable',
+          include: [
+            { model: subject, as: 'subjectKeyId' },
+            { model: station, as: 'stationKeyId' },
+            { model: classStudy, as: 'classStudyKeyId' },
+          ],
+        },
+        { model: subscription, as: 'subscription' },
+      ],
+    };
+    const find = await notification.findAll(query);
     return find;
   }
 }
