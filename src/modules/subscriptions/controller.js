@@ -153,6 +153,7 @@ export class SubscriptionCtrl {
           data: response.authError('failed, the provided information does not match to our records'),
         });
       }
+      const subscriberInformation = await subscriptionService.findSubscriberInformation(find.subscriptionId);
       //generate auth token
       const token = generate.generateToken({
         secret: SUBSCRIPTION_SECRET_KEY,
@@ -162,7 +163,31 @@ export class SubscriptionCtrl {
       return response.successResponse({
         res,
         status: 200,
-        data: { token, message: `welcome back ${find.name}` },
+        data: { token, message: `welcome back ${find.name}`, information: subscriberInformation },
+      });
+    } catch (error) {
+      return response.errorResponse({ res, status: 500, data: response.serverError('an error occurred try again.') });
+    }
+  }
+
+  async createSubscriberUsingUssd(req, res) {
+    try {
+      const { phoneNumber, name } = req.body;
+      const { subscription } = await subscriptionService.createSubscription({
+        phoneNumber: `${RWANDA_CODE}${phoneNumber}`,
+        name,
+      });
+      const subscriberInformation = await subscriptionService.findSubscriberInformation(subscription.subscriptionId);
+      //generate auth token
+      const token = generate.generateToken({
+        secret: SUBSCRIPTION_SECRET_KEY,
+        payload: generate.subscriptionPayload(subscription),
+        time: '4h',
+      });
+      return response.successResponse({
+        res,
+        status: 200,
+        data: { token, message: `welcome back ${subscription.name}`, information: subscriberInformation },
       });
     } catch (error) {
       return response.errorResponse({ res, status: 500, data: response.serverError('an error occurred try again.') });

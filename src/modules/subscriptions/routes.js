@@ -36,4 +36,13 @@ app.delete('/unsubscribe', authMiddl.isSubscriberAuth, subscriptionCtrl.unsubscr
 // POST - log in subscribe
 app.post('/ussd-login', subscriptionCtrl.loginFromUssd);
 
+// POST - create subscription from USSD
+app.post(
+  '/ussd-create-subscription',
+  subscriptionHelper.createSchema(),
+  userMiddl.validator,
+  subscriptionMiddl.checkIfPhoneExist,
+  subscriptionCtrl.createSubscriberUsingUssd
+);
+
 export default app;

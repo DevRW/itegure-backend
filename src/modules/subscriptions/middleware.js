@@ -5,7 +5,8 @@ export class SubscriptionMiddleware {
   async checkIfPhoneExist(req, res, next) {
     try {
       const { phoneNumber } = req.body;
-      const find = await subscriptionService.findOneSubscription(phoneNumber);
+      const { RWANDA_CODE } = process.env;
+      const find = await subscriptionService.findOneSubscription(`${RWANDA_CODE}${phoneNumber}`);
       if (find) {
         return response.errorResponse({
           res,
