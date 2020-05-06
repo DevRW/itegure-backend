@@ -127,16 +127,7 @@ export class SubscriptionCtrl {
 
   async unsubscribe(req, res) {
     try {
-      const { phoneNumber, subscriptionId } = req.subscriber;
-      const { code } = req.body;
-      const find = await subscriptionService.findPendingVerificationCode(phoneNumber, code);
-      if (!find) {
-        return response.errorResponse({
-          res,
-          status: 401,
-          data: response.authError('failed, the provided information does not match'),
-        });
-      }
+      const { subscriptionId } = req.subscriber;
       const remove = await subscriptionService.unsubscription(subscriptionId);
       //update verification
       if (remove) {
@@ -146,6 +137,58 @@ export class SubscriptionCtrl {
           data: remove,
         });
       }
+    } catch (error) {
+      return response.errorResponse({ res, status: 500, data: response.serverError('an error occurred try again.') });
+    }
+  }
+
+  async loginFromUssd(req, res) {
+    try {
+      const { phoneNumber } = req.body;
+      const find = await subscriptionService.findOneSubscription(`${RWANDA_CODE}${phoneNumber}`);
+      if (!find) {
+        return response.errorResponse({
+          res,
+          status: 401,
+          data: response.authError('failed, the provided information does not match to our records'),
+        });
+      }
+      const subscriberInformation = await subscriptionService.findSubscriberInformation(find.subscriptionId);
+      //generate auth token
+      const token = generate.generateToken({
+        secret: SUBSCRIPTION_SECRET_KEY,
+        payload: generate.subscriptionPayload(find),
+        time: '4h',
+      });
+      return response.successResponse({
+        res,
+        status: 200,
+        data: { token, message: `welcome back ${find.name}`, information: subscriberInformation },
+      });
+    } catch (error) {
+      return response.errorResponse({ res, status: 500, data: response.serverError('an error occurred try again.') });
+    }
+  }
+
+  async createSubscriberUsingUssd(req, res) {
+    try {
+      const { phoneNumber, name } = req.body;
+      const { subscription } = await subscriptionService.createSubscription({
+        phoneNumber: `${RWANDA_CODE}${phoneNumber}`,
+        name,
+      });
+      const subscriberInformation = await subscriptionService.findSubscriberInformation(subscription.subscriptionId);
+      //generate auth token
+      const token = generate.generateToken({
+        secret: SUBSCRIPTION_SECRET_KEY,
+        payload: generate.subscriptionPayload(subscription),
+        time: '4h',
+      });
+      return response.successResponse({
+        res,
+        status: 200,
+        data: { token, message: `welcome back ${subscription.name}`, information: subscriberInformation },
+      });
     } catch (error) {
       return response.errorResponse({ res, status: 500, data: response.serverError('an error occurred try again.') });
     }

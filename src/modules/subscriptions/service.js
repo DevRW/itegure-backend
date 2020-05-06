@@ -2,7 +2,7 @@ import models from '../../database/models';
 import generate from '../generates/generate';
 import { and } from 'sequelize';
 import { verificationStatus } from '../../database/models/verification';
-const { subscription, verification } = models;
+const { subscription, verification, classStudy, student } = models;
 
 export class SubscriptionService {
   async createVerificationCode(phoneNumber) {
@@ -47,6 +47,14 @@ export class SubscriptionService {
     return {
       message: 'unsubscribed successfully',
     };
+  }
+  async findSubscriberInformation(subscriptionId) {
+    const query = {
+      where: { subscriptionId },
+      include: [{ model: student, as: 'parent', include: [{ model: classStudy, as: 'class' }] }],
+    };
+    const find = await subscription.findAll(query);
+    return find;
   }
 }
 export default new SubscriptionService();

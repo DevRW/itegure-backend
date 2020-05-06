@@ -29,16 +29,20 @@ app.post(
 // GET - Subscriber profile
 app.get('/read-profile', authMiddl.isSubscriberAuth, subscriptionCtrl.currentSubscriberProfile);
 
-// POST - unsubscribe
-app.post('/request-unsubscription', authMiddl.isSubscriberAuth, subscriptionCtrl.sendUnsubscribeCode);
-
 // DELETE unsubscribe
-app.delete(
-  '/unsubscribe',
-  authMiddl.isSubscriberAuth,
-  subscriptionHelper.code(),
+app.delete('/unsubscribe', authMiddl.isSubscriberAuth, subscriptionCtrl.unsubscribe);
+
+// USSD
+// POST - log in subscribe
+app.post('/ussd-login', subscriptionCtrl.loginFromUssd);
+
+// POST - create subscription from USSD
+app.post(
+  '/ussd-create-subscription',
+  subscriptionHelper.createSchema(),
   userMiddl.validator,
-  subscriptionCtrl.unsubscribe
+  subscriptionMiddl.checkIfPhoneExist,
+  subscriptionCtrl.createSubscriberUsingUssd
 );
 
 export default app;
