@@ -51,6 +51,16 @@ export class TimetableHelper {
     const calDate = date < 10 ? `0${date}` : date;
     return `${year}-${getMonth}-${calDate}`;
   }
+  getNextDayDate() {
+    const data = new Date();
+    data.setDate(new Date().getDate() + 1);
+    const month = Number(data.getMonth()) + 1;
+    const date = Number(data.getDate());
+    const year = data.getFullYear();
+    const getMonth = month < 10 ? `0${month}` : month;
+    const calDate = date < 10 ? `0${date}` : date;
+    return `${year}-${getMonth}-${calDate}`;
+  }
 }
 
 export default new TimetableHelper();

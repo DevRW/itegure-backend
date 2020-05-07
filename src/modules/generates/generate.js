@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import codeGenerator from 'node-code-generator';
-import twilio from 'twilio';
+import axios from 'axios';
 export class Generate {
   /**
    *
@@ -46,12 +46,18 @@ export class Generate {
     };
   }
 
-  async generateMessage({ body, from, to }) {
-    const { TWILIO_SID, TWILIO_AUTH_TOKEN } = process.env;
-    const accountSid = TWILIO_SID;
-    const authToken = TWILIO_AUTH_TOKEN;
-    const client = twilio(accountSid, authToken);
-    const send = await client.messages.create({ body, from, to });
+  async generateMessage({ body, to }) {
+    const { SMS_API_GATEWAY, SMS_SENDER_NAME, SMS_CLIENT, SMS_CLIENT_PASSWORD } = process.env;
+    const randomNumber = Math.floor(Math.random() * 11000);
+    const randomMsgId = `LN${randomNumber}`;
+    const send = await axios.post(`${SMS_API_GATEWAY}`, {
+      ohereza: `${SMS_SENDER_NAME}`,
+      ubutumwa: `${body}`,
+      msgid: `${randomMsgId}`,
+      kuri: `${to}`,
+      client: `${SMS_CLIENT}`,
+      password: `${SMS_CLIENT_PASSWORD}`,
+    });
     return send;
   }
 }
