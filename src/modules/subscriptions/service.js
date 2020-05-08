@@ -44,6 +44,7 @@ export class SubscriptionService {
   }
   async unsubscription(subscriptionId) {
     await subscription.destroy({ where: { subscriptionId } });
+    await student.destroy({ where: { subscriberId: subscriptionId } });
     return {
       message: 'unsubscribed successfully',
     };

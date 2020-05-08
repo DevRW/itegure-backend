@@ -8,10 +8,13 @@ export class NotificationHelper {
     cron
       .schedule(
         '0 * * * *',
-        async () => {
-          const notify = await notificationService.notifyParent();
-          const sendRemider = await notificationCtrl.sendReminder(notify);
-          return sendRemider;
+        () => {
+          notificationService
+            .notifyParent()
+            .then((response) => {
+              notificationCtrl.sendReminder(response).then((notification) => {});
+            })
+            .catch((error) => {});
         },
         { scheduled: true }
       )
