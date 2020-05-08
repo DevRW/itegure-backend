@@ -1,5 +1,6 @@
 import response from '../generates/response';
 import timetableService from './service';
+import notificationService from '../notifications/service';
 
 export class TimetableController {
   async createTimetable(req, res) {
@@ -15,7 +16,6 @@ export class TimetableController {
       });
       return response.successResponse({ res, status: 201, data: newTimetable });
     } catch (error) {
-      console.log(error);
       return response.errorResponse({ res, status: 500, data: response.serverError('something wrong') });
     }
   }
@@ -33,11 +33,12 @@ export class TimetableController {
     try {
       const { id } = req.params;
       const { date, timeFrom, timeTo, subject, classStudy, station } = req.body;
+      const from = `${date} ${timeFrom}`;
+      const to = `${date} ${timeTo}`;
       const updateTimetable = await timetableService.updateTimetable(
-        { date, timeFrom, timeTo, subject, classStudy, station },
+        { date, timeFrom: from, timeTo: to, subject, classStudy, station },
         { where: { id } }
       );
-
       return response.successResponse({ res, status: 200, data: updateTimetable });
     } catch (error) {
       return response.errorResponse({ res, status: 500, data: response.serverError('something wrong') });

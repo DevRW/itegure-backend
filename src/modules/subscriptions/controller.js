@@ -17,7 +17,7 @@ export class SubscriptionCtrl {
       if (verification) {
         // send verification code
         const body = `your verification code is ${verification.code}`;
-        await generate.generateMessage({ body, from: TWILIO_PHONE_NUMBER, to: subscription.phoneNumber });
+        await generate.generateMessage({ body, to: subscription.phoneNumber });
         return response.successResponse({
           res,
           status: 201,
@@ -84,7 +84,7 @@ export class SubscriptionCtrl {
       if (verification) {
         // send verification code
         const body = `Your verification code is ${verification.code}`;
-        await generate.generateMessage({ body, from: TWILIO_PHONE_NUMBER, to: find.phoneNumber });
+        await generate.generateMessage({ body, to: find.phoneNumber });
         return response.successResponse({
           res,
           status: 200,
@@ -110,7 +110,7 @@ export class SubscriptionCtrl {
       const { verification } = await subscriptionService.createVerificationCode(phoneNumber);
       if (verification) {
         const body = `your verification code is ${verification.code}`;
-        await generate.generateMessage({ body, from: TWILIO_PHONE_NUMBER, to: phoneNumber });
+        await generate.generateMessage({ body, to: phoneNumber });
         return response.successResponse({
           res,
           status: 200,
