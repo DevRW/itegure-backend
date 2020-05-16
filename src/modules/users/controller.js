@@ -64,6 +64,8 @@ export class UserCtrl {
             message: `welcome back ${username}`,
             token,
             roles,
+            username,
+            email,
           },
         });
       } else {
