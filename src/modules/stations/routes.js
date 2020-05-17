@@ -24,13 +24,6 @@ app.put(
   requestValidator.validator,
   station.updateStation
 );
-app.delete(
-  '/:id',
-  authMiddl.isAuth,
-  stationMiddleware.checkIfStationExist,
-  stationHelper.stationSchemas(),
-  requestValidator.validator,
-  station.deleteStation
-);
+app.delete('/:id', authMiddl.isAuth, stationMiddleware.checkIfStationExist, station.deleteStation);
 
 export default app;
