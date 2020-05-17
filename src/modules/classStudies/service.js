@@ -13,9 +13,7 @@ export class ClassStudyServices {
     return find;
   }
   async findAllclasses() {
-    const find = await classStudy.findAll({
-      attributes: ['id', 'name'],
-    });
+    const find = await classStudy.findAll({ order: [['id', 'DESC']] });
     return find;
   }
   async updateClass(value, query) {
