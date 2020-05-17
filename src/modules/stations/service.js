@@ -13,7 +13,7 @@ export class stationServices {
     return find;
   }
   async findAllStations() {
-    const find = await station.findAll();
+    const find = await station.findAll({ order: [['id', 'DESC']] });
     return find;
   }
   async updateStation(value, query) {
