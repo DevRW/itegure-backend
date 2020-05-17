@@ -13,7 +13,7 @@ export class subjectServices {
     return find;
   }
   async findAllSubjects() {
-    const find = await subject.findAll();
+    const find = await subject.findAll({ order: [['id', 'DESC']] });
     return find;
   }
   async updateSubject(value, query) {
