@@ -7,11 +7,11 @@ export class TimetableHelper {
   schemaValidation() {
     return {
       dateSchema: check('date').notEmpty().withMessage('name must be between 4 to 15 chars'),
-      timeFromSchema: check('timeFrom').notEmpty().withMessage('class is required'),
-      timeToSchema: check('timeTo').notEmpty().withMessage('class is required'),
+      timeFromSchema: check('timeFrom').notEmpty().withMessage('timeFrom is required'),
+      timeToSchema: check('timeTo').notEmpty().withMessage('timeTo is required'),
       classSchema: check('classStudy').notEmpty().withMessage('class is required'),
-      subjectSchema: check('subject').notEmpty().withMessage('class is required'),
-      stationSchema: check('station').notEmpty().withMessage('class is required'),
+      subjectSchema: check('subject').notEmpty().withMessage('subject is required'),
+      stationSchema: check('station').notEmpty().withMessage('station is required'),
     };
   }
   // timetable validation schema

@@ -1,6 +1,6 @@
 import model from '../../database/models';
 import timeTableHelper from './helper';
-const { timetable } = model;
+const { timetable, classStudy, subject, station } = model;
 
 export class timetableServices {
   async register(data) {
@@ -22,7 +22,15 @@ export class timetableServices {
     return find;
   }
   async findAllTimetable() {
-    const find = await timetable.findAll();
+    const query = {
+      include: [
+        { model: classStudy, as: 'classStudyKeyId' },
+        { model: subject, as: 'subjectKeyId' },
+        { model: station, as: 'stationKeyId' },
+      ],
+      order: [['id', 'DESC']],
+    };
+    const find = await timetable.findAll(query);
     return find;
   }
   async updateTimetable(value, query) {
