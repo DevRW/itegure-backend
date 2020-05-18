@@ -57,5 +57,11 @@ export class SubscriptionService {
     const find = await subscription.findAll(query);
     return find;
   }
+  async findAllParent() {
+    const find = await subscription.findAll({
+      include: [{ model: student, as: 'parent', include: [{ model: classStudy, as: 'class' }] }],
+    });
+    return find;
+  }
 }
 export default new SubscriptionService();
