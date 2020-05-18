@@ -60,6 +60,7 @@ export class SubscriptionService {
   async findAllParent() {
     const find = await subscription.findAll({
       include: [{ model: student, as: 'parent', include: [{ model: classStudy, as: 'class' }] }],
+      order: [['subscriptionId', 'DESC']],
     });
     return find;
   }

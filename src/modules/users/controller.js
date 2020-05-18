@@ -139,7 +139,7 @@ export class UserCtrl {
       return response.errorResponse({
         res,
         status: 500,
-        data: response.serverError('an error occured while changing password'),
+        data: response.serverError('an error occured please try again later'),
       });
     }
   }
