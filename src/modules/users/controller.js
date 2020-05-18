@@ -4,6 +4,7 @@ import { or } from 'sequelize';
 import generateHelper from '../generates/generate';
 import { config } from 'dotenv';
 import userHelper from './helper';
+import subscriptionService from '../subscriptions/service';
 config();
 const { SECRET_OR_KEY } = process.env;
 export class UserCtrl {
@@ -126,6 +127,19 @@ export class UserCtrl {
         res,
         status: 500,
         data: response.serverError('an error occured while changing password'),
+      });
+    }
+  }
+
+  async viewAllParents(req, res) {
+    try {
+      const find = await subscriptionService.findAllParent();
+      return response.successResponse({ res, status: 200, data: find });
+    } catch (error) {
+      return response.errorResponse({
+        res,
+        status: 500,
+        data: response.serverError('an error occured please try again later'),
       });
     }
   }

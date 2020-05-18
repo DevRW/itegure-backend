@@ -31,4 +31,7 @@ app.put(
   userMiddl.validator,
   userCtrl.changePassword
 );
+
+app.get('/read/parents', authMiddl.isAuth, userCtrl.viewAllParents);
+
 export default app;
