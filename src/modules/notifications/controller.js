@@ -27,42 +27,74 @@ export class NotificationController {
     const { SMS_API_GATEWAY, SMS_SENDER_NAME, SMS_CLIENT, SMS_CLIENT_PASSWORD } = process.env;
     const randomNumber = Math.floor(Math.random() * 11000);
     const randomMsgId = `LN${randomNumber}`;
+    const newArrayPush = [];
     if (data.length !== 0) {
       for (let index = 0; index < data.length; index++) {
         const element = data[index];
         const { id: timetableId, timeFrom, timeTo, classStudyKeyId, stationKeyId, subjectKeyId } = element;
-        const { class: student } = classStudyKeyId;
+        const { class: student, name: className } = classStudyKeyId;
         const { name: stationName, type } = stationKeyId;
         const { name: subjectName } = subjectKeyId;
+        const timeTableInfo = { stationName, timetableId, subjectName, timeFrom, timeTo, className };
         for (let j = 0; j < student.length; j++) {
           const studentElement = student[j];
-          const { parent, name: studentName } = studentElement;
+          const { parent, name: studentName, studentId } = studentElement;
           const { phoneNumber, subscriptionId } = parent;
-          const body = `Muraho, ${studentName} aribuze kwiga isomo rya ${subjectName} kuri ${type} ${stationName} saa ${timeFrom} - ${timeTo} Murakoze`;
-
-          axios
-            .post(`${SMS_API_GATEWAY}`, {
-              ohereza: `${SMS_SENDER_NAME}`,
-              ubutumwa: `${body}`,
-              msgid: `${randomMsgId}`,
-              kuri: `${phoneNumber}`,
-              client: `${SMS_CLIENT}`,
-              password: `${SMS_CLIENT_PASSWORD}`,
-            })
-            .then((response) => {
-              notificationService
-                .registerSentMessage({
-                  message: body,
-                  subscriberId: subscriptionId,
-                  status: notificationStatus[0],
-                  timetableId,
-                })
-                .then((datas) => {});
-            })
-            .catch((error) => {
-              throw error;
-            });
+          const studentInfo = { studentId, subscriptionId, studentName, phoneNumber };
+          const timeTableWithStudent = Object.assign(studentInfo, timeTableInfo);
+          newArrayPush.push(timeTableWithStudent);
         }
+      }
+      const sortedArray = newArrayPush.sort((a, b) => parseFloat(a.studentId) - parseFloat(b.studentId));
+      let newArrayElement;
+      for (let currentIndex = 0; currentIndex < sortedArray.length; currentIndex++) {
+        newArrayElement = sortedArray[currentIndex];
+        const {
+          studentId,
+          studentName,
+          className,
+          phoneNumber,
+          subscriptionId,
+          timetableId,
+          subjectName,
+          stationName,
+          timeFrom,
+          timeTo,
+        } = newArrayElement;
+        let message = `Ayo niyo masomo azigwa na ${className}.`;
+        message += ` ${subjectName} kuri ${stationName} itariki ${timeFrom}`;
+        while (currentIndex !== sortedArray.length - 1 && studentId === sortedArray[currentIndex + 1]['studentId']) {
+          let {
+            subjectName: newSubjectName,
+            stationName: newStation,
+            timeFrom: newTimeFrom,
+            timeTo: newTimeto,
+          } = sortedArray[currentIndex + 1];
+          message += `, ${newSubjectName} kuri ${newStation} itariki ${newTimeFrom}`;
+          currentIndex++;
+        }
+        axios
+          .post(`${SMS_API_GATEWAY}`, {
+            ohereza: `${SMS_SENDER_NAME}`,
+            ubutumwa: `${message}`,
+            msgid: `${randomMsgId}`,
+            kuri: `${phoneNumber}`,
+            client: `${SMS_CLIENT}`,
+            password: `${SMS_CLIENT_PASSWORD}`,
+          })
+          .then((response) => {
+            notificationService
+              .registerSentMessage({
+                message: message,
+                subscriberId: subscriptionId,
+                status: notificationStatus[0],
+                timetableId,
+              })
+              .then((datas) => {});
+          })
+          .catch((error) => {
+            throw error;
+          });
       }
     }
   }
