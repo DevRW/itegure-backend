@@ -12,7 +12,7 @@ export class NotificationHelper {
           notificationService
             .notifyParent(null)
             .then((response) => {
-              notificationCtrl.sendReminder(response).then((notification) => {});
+              notificationCtrl.sendReminder(response, true).then((notification) => {});
             })
             .catch((error) => {});
         },

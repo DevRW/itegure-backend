@@ -9,7 +9,7 @@ export class NotificationService {
     const nextDayDate = moment().add(1, 'day').format('YYYY-MM-DD');
     const condition =
       studentClass !== null
-        ? { date: { [Op.gt]: new Date(Date.now()) }, classStudy: studentClass }
+        ? { timeFrom: { [Op.gt]: new Date(Date.now() - 60 * 60 * 1000) }, classStudy: studentClass }
         : { date: new Date(nextDayDate) };
     const limitTimeTable = studentClass !== null ? 3 : null;
     const query = {

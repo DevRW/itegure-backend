@@ -1,6 +1,7 @@
 import response from '../generates/response';
 import timetableService from './service';
 import notificationService from '../notifications/service';
+import notificationCtrl from '../notifications/controller';
 
 export class TimetableController {
   async createTimetable(req, res) {
@@ -56,6 +57,23 @@ export class TimetableController {
       return response.successResponse({ res, status: 200, data: deletedTimetable });
     } catch (error) {
       return response.errorResponse({ res, status: 500, data: response.serverError('something wrong') });
+    }
+  }
+  async getAllUpcomingLessons(req, res) {
+    try {
+      const { classStudy } = req.body;
+      const getLessons = await notificationService.notifyParent(classStudy);
+      if (!getLessons.length) {
+        return response.successResponse({
+          res,
+          status: 200,
+          data: { message: 'No upcoming lessons. Try again letter' },
+        });
+      }
+      const upcomingLessons = notificationCtrl.sendReminder(getLessons, false);
+      return response.successResponse({ res, status: 200, data: upcomingLessons });
+    } catch (error) {
+      return response.errorResponse({ res, status: 500, data: response.serverError('an error occured, try again') });
     }
   }
 }

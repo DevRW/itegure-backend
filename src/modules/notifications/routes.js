@@ -1,6 +1,7 @@
 import express from 'express';
 import notificationCtrl from './controller';
 import authMiddl from '../auths/middleware';
+import classMiddl from '../classStudies/middleware';
 
 const app = express.Router();
 

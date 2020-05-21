@@ -18,7 +18,7 @@ export class StudentControler {
       notificationService
         .notifyParent(classStudy)
         .then((response) => {
-          notificationCtrl.sendReminder(response).then((notification) => {});
+          notificationCtrl.sendReminder(response, true).then((notification) => {});
         })
         .catch((error) => {});
       return response.successResponse({ res, status: 201, data: create });
