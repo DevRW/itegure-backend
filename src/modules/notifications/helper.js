@@ -7,10 +7,10 @@ export class NotificationHelper {
   runCron() {
     cron
       .schedule(
-        '0 * * * *',
+        '0 20 * * *',
         () => {
           notificationService
-            .notifyParent()
+            .notifyParent(null)
             .then((response) => {
               notificationCtrl.sendReminder(response).then((notification) => {});
             })

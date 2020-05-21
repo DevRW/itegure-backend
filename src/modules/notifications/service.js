@@ -5,32 +5,27 @@ import timetableHelper from '../timetable/helper';
 import { and, Op } from 'sequelize';
 const { notification, timetable, subscription, classStudy, station, student, subject } = models;
 export class NotificationService {
-  async notifyParent() {
-    const { getDate, getNextDayDate } = timetableHelper;
-    const hours = new Date().getHours();
-    if (hours === 22) {
-      hours = -2;
-    }
-    if (hours === 23) {
-      hours = -1;
-    }
-    const getTime = `${hours + 2}:00`;
-    const addMinutes = `${hours + 2}:59`;
-    const todayDate =
-      hours === -2 || hours === -1 ? moment().add(1, 'day').format('YYYY-MM-DD') : moment().format('YYYY-MM-DD');
-    const time1 = hours === -2 || hours === -1 ? `${getNextDayDate()} ${getTime}` : `${getDate()} ${getTime}`;
-    const time2 = hours === -2 || hours === -1 ? `${getNextDayDate()} ${addMinutes}` : `${getDate()} ${addMinutes}`;
+  async notifyParent(studentClass) {
+    const nextDayDate = moment().add(1, 'day').format('YYYY-MM-DD');
+    const condition =
+      studentClass !== null
+        ? { date: { [Op.gt]: new Date(Date.now()) }, classStudy: studentClass }
+        : { date: new Date(nextDayDate) };
+    const limitTimeTable = studentClass !== null ? 3 : null;
     const query = {
-      where: and({ date: new Date(todayDate), timeFrom: { [Op.between]: [time1, time2] } }),
+      where: and(condition),
       include: [
         {
           model: classStudy,
           as: 'classStudyKeyId',
-          include: [{ model: student, as: 'class', include: [{ model: subscription, as: 'parent' }] }],
+          include: [
+            { model: student, group: ['subscriberId'], as: 'class', include: [{ model: subscription, as: 'parent' }] },
+          ],
         },
         { model: station, as: 'stationKeyId' },
         { model: subject, as: 'subjectKeyId' },
       ],
+      limit: limitTimeTable,
     };
     const find = await timetable.findAll(query);
     return find;
