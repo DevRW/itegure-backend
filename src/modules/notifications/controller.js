@@ -23,7 +23,7 @@ export class NotificationController {
     }
   }
 
-  sendReminder(data) {
+  sendReminder(data, sendSms) {
     const { SMS_API_GATEWAY, SMS_SENDER_NAME, SMS_CLIENT, SMS_CLIENT_PASSWORD } = process.env;
     const randomNumber = Math.floor(Math.random() * 11000);
     const randomMsgId = `LN${randomNumber}`;
@@ -72,6 +72,9 @@ export class NotificationController {
           } = sortedArray[currentIndex + 1];
           message += `, ${newSubjectName} kuri ${newStation} itariki ${newTimeFrom}`;
           currentIndex++;
+        }
+        if (!sendSms) {
+          return message;
         }
         axios
           .post(`${SMS_API_GATEWAY}`, {
