@@ -63,15 +63,15 @@ export class TimetableController {
     try {
       const { classStudy } = req.params;
       const getLessons = await notificationService.notifyParent(classStudy);
-      if (!getLessons.length) {
+      if (!getLessons.length || getLessons === {}) {
         return response.successResponse({
           res,
           status: 200,
-          data: { message: 'No upcoming lessons. Try again letter' },
+          data: [{ message: 'No upcoming lessons. Try again letter' }],
         });
       }
       const upcomingLessons = notificationCtrl.sendReminder(getLessons, false);
-      return response.successResponse({ res, status: 200, data: upcomingLessons });
+      return response.successResponse({ res, status: 200, data: [{ upcomingLessons }] });
     } catch (error) {
       return response.errorResponse({ res, status: 500, data: response.serverError('an error occured, try again') });
     }
