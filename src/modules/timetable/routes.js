@@ -36,6 +36,6 @@ app.put(
 app.delete('/:id', authMiddl.isAuth, timetableMiddleware.checkIfprogramExist, timetable.deleteTimetable);
 
 // GET find upcomping lessons
-app.get('/upcoming-lessons', classStudyMiddleware.checkIfClassExist, timetable.getAllUpcomingLessons);
+app.get('/upcoming-lessons/:classStudy', timetable.getAllUpcomingLessons);
 
 export default app;
