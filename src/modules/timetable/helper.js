@@ -42,8 +42,24 @@ export class TimetableHelper {
     }
     return date.getMinutes();
   }
+  getCurrentHour() {
+    const data = new Date();
+    if (data.getHours() < 10) {
+      return `0${data.getHours()}`;
+    }
+    return data.getHours();
+  }
   getDate() {
     const data = new Date();
+    const month = Number(data.getMonth()) + 1;
+    const date = Number(data.getDate());
+    const year = data.getFullYear();
+    const getMonth = month < 10 ? `0${month}` : month;
+    const calDate = date < 10 ? `0${date}` : date;
+    return `${year}-${getMonth}-${calDate}`;
+  }
+  getCurrentDate(value) {
+    const data = new Date(value);
     const month = Number(data.getMonth()) + 1;
     const date = Number(data.getDate());
     const year = data.getFullYear();
