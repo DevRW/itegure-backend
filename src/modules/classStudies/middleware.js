@@ -9,18 +9,16 @@ export class ClassStudiesMiddleware {
    */
   async checkIfClassExist(req, res, next) {
     try {
-      const { id, studentId } = req.params;
+      const { id, studentId, classStudy } = req.params;
       const createStudentUrl = '/api/v1/students/create-student';
       const updateStudentUrl = `/api/v1/students/update-student/${studentId}`;
       const createTimeTableUrl = '/api/v1/timetable';
       const updateTimeTableUrl = `/api/v1/timetable/${id}`;
-      const getlessonsUrl = '/api/v1/timetable/upcoming-lessons';
       const manageURL =
         req.originalUrl === createStudentUrl ||
         req.originalUrl === updateStudentUrl ||
         req.originalUrl === createTimeTableUrl ||
-        req.originalUrl === updateTimeTableUrl ||
-        req.originalUrl === getlessonsUrl
+        req.originalUrl === updateTimeTableUrl
           ? req.body.classStudy
           : id;
       const verifyId = await classStudyService.findOne({ where: { id: manageURL } });
@@ -34,8 +32,7 @@ export class ClassStudiesMiddleware {
               req.originalUrl === createStudentUrl ||
               req.originalUrl === updateStudentUrl ||
               req.originalUrl === createTimeTableUrl ||
-              req.originalUrl === updateTimeTableUrl ||
-              req.originalUrl === getlessonsUrl
+              req.originalUrl === updateTimeTableUrl
                 ? 'classStudy'
                 : 'id',
           }),

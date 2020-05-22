@@ -61,7 +61,7 @@ export class TimetableController {
   }
   async getAllUpcomingLessons(req, res) {
     try {
-      const { classStudy } = req.body;
+      const { classStudy } = req.params;
       const getLessons = await notificationService.notifyParent(classStudy);
       if (!getLessons.length) {
         return response.successResponse({
