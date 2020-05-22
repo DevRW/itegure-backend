@@ -1,7 +1,7 @@
 import response from '../generates/response';
 import timetableService from './service';
 import notificationService from '../notifications/service';
-import notificationCtrl from '../notifications/controller';
+import timeTableHelper from './helper';
 
 export class TimetableController {
   async createTimetable(req, res) {
@@ -34,8 +34,10 @@ export class TimetableController {
     try {
       const { id } = req.params;
       const { date, timeFrom, timeTo, subject, classStudy, station } = req.body;
-      const from = `${date} ${timeFrom}`;
-      const to = `${date} ${timeTo}`;
+      const { getCurrentDate } = timeTableHelper;
+      const currenDate = getCurrentDate(date);
+      const from = `${currenDate} ${timeFrom}`;
+      const to = `${currenDate} ${timeTo}`;
       const updateTimetable = await timetableService.updateTimetable(
         { date, timeFrom: from, timeTo: to, subject, classStudy, station },
         { where: { id } }
@@ -63,15 +65,7 @@ export class TimetableController {
     try {
       const { classStudy } = req.params;
       const getLessons = await notificationService.notifyParent(classStudy);
-      if (!getLessons.length || getLessons === {}) {
-        return response.successResponse({
-          res,
-          status: 200,
-          data: [{ message: 'No upcoming lessons. Try again letter' }],
-        });
-      }
-      const upcomingLessons = notificationCtrl.sendReminder(getLessons, false);
-      return response.successResponse({ res, status: 200, data: [{ upcomingLessons }] });
+      return response.successResponse({ res, status: 200, data: getLessons });
     } catch (error) {
       return response.errorResponse({ res, status: 500, data: response.serverError('an error occured, try again') });
     }

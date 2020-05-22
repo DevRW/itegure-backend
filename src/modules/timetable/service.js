@@ -4,10 +4,11 @@ const { timetable, classStudy, subject, station } = model;
 
 export class timetableServices {
   async register(data) {
-    const { generateDate, calculateTimeStamp } = timeTableHelper;
+    const { getCurrentDate } = timeTableHelper;
     const { timeFrom, timeTo, date } = data;
-    const from = `${date} ${timeFrom}`;
-    const to = `${date} ${timeTo}`;
+    const currenDate = getCurrentDate(date);
+    const from = `${currenDate} ${timeFrom}`;
+    const to = `${currenDate} ${timeTo}`;
     await timetable.create({
       ...data,
       timeFrom: from,
