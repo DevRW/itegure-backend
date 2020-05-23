@@ -27,7 +27,6 @@ app.put(
   authMiddl.isAuth,
   timetableHelper.timetableSchemas(),
   requestValidator.validator,
-  timetableMiddleware.checkIftimetableExist,
   subjectsMiddleware.checkIfSubjectExist,
   classStudyMiddleware.checkIfClassExist,
   stationMiddleware.checkIfStationExist,
