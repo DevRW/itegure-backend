@@ -16,7 +16,7 @@ export class StudentControler {
       const body = `Murakoze kwiyandikisha. muzajya mubona SMS iba menyesha igihe ${name} ifite amasomo kuri Radio/Tv`;
       await generate.generateMessage({ body, to: phoneNumber });
       notificationService
-        .notifyParent(classStudy)
+        .notifyParent(classStudy, phoneNumber)
         .then((response) => {
           notificationCtrl.sendReminder(response).then((notification) => {});
         })

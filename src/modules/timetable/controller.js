@@ -64,7 +64,7 @@ export class TimetableController {
   async getAllUpcomingLessons(req, res) {
     try {
       const { classStudy } = req.params;
-      const getLessons = await notificationService.notifyParent(classStudy);
+      const getLessons = await notificationService.notifyParent(classStudy, null);
       return response.successResponse({ res, status: 200, data: getLessons });
     } catch (error) {
       return response.errorResponse({ res, status: 500, data: response.serverError('an error occured, try again') });

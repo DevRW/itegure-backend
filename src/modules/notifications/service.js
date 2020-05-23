@@ -5,7 +5,7 @@ import timetableHelper from '../timetable/helper';
 import { and, Op } from 'sequelize';
 const { notification, timetable, subscription, classStudy, station, student, subject } = models;
 export class NotificationService {
-  async notifyParent(studentClass) {
+  async notifyParent(studentClass, parentPhone) {
     const { getDate, getCurrentMinutes, getCurrentHour } = timetableHelper;
     const getTime = `${getCurrentHour()}:${getCurrentMinutes()}`;
     const realDateAndTime = `${getDate()} ${getTime}`;
@@ -14,6 +14,7 @@ export class NotificationService {
       studentClass !== null
         ? { timeFrom: { [Op.gt]: realDateAndTime }, classStudy: studentClass }
         : { date: new Date(nextDayDate) };
+    const checkParentPhone = studentClass !== null && parentPhone !== null ? { phoneNumber: parentPhone } : null;
     const limitTimeTable = studentClass !== null ? 3 : null;
     const query = {
       where: and(condition),
@@ -22,7 +23,11 @@ export class NotificationService {
           model: classStudy,
           as: 'classStudyKeyId',
           include: [
-            { model: student, group: ['subscriberId'], as: 'class', include: [{ model: subscription, as: 'parent' }] },
+            {
+              model: student,
+              as: 'class',
+              include: [{ model: subscription, as: 'parent', where: checkParentPhone }],
+            },
           ],
         },
         { model: station, as: 'stationKeyId' },

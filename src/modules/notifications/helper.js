@@ -10,7 +10,7 @@ export class NotificationHelper {
         '0 20 * * *',
         () => {
           notificationService
-            .notifyParent(null)
+            .notifyParent(null, null)
             .then((response) => {
               notificationCtrl.sendReminder(response).then((notification) => {});
             })
