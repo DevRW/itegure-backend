@@ -61,7 +61,7 @@ export class NotificationController {
           timeFrom,
           timeTo,
         } = newArrayElement;
-        let message = `Ayo niyo masomo azigwa na ${className}.`;
+        let message = `Aya niyo masomo azigwa na ${className}.`;
         message += ` ${subjectName} kuri ${stationName} ${timeFrom}`;
         while (currentIndex !== sortedArray.length - 1 && studentId === sortedArray[currentIndex + 1]['studentId']) {
           let {
