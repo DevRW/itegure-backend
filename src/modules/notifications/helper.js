@@ -7,7 +7,7 @@ export class NotificationHelper {
   runCron() {
     cron
       .schedule(
-        '0 20 * * *',
+        '0 18 * * *',
         () => {
           notificationService
             .notifyParent(null, null)
