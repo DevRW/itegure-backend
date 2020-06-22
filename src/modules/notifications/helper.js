@@ -20,5 +20,20 @@ export class NotificationHelper {
       )
       .start();
   }
+  toCamelCase(sentenceCase) {
+    let out = '';
+    sentenceCase.split('').forEach(function (el, idx) {
+      var add = el.toLowerCase();
+      out += (idx === 0 ? add : add[0].toUpperCase() + add.slice(1));
+    });
+    return out;
+  }
+  formartWord(word) {
+    word = word.toUpperCase();
+    if (word.split(' ').length == 1) {
+      word = this.toCamelCase(word);
+    }
+    return word;
+  }
 }
 export default new NotificationHelper();
