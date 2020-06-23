@@ -62,7 +62,8 @@ export class NotificationController {
           timeTo,
         } = newArrayElement;
         let message = `Aya niyo masomo azigwa na ${className}.`;
-        message += ` ${subjectName} kuri ${stationName} ${timeFrom}`;
+        message += ` ${formartWord(subjectName)} kuri ${formartWord(stationName)} ${timeFrom}`;
+        console.log(message);
         while (currentIndex !== sortedArray.length - 1 && studentId === sortedArray[currentIndex + 1]['studentId']) {
           let {
             subjectName: newSubjectName,
@@ -70,7 +71,8 @@ export class NotificationController {
             timeFrom: newTimeFrom,
             timeTo: newTimeto,
           } = sortedArray[currentIndex + 1];
-          message += `, ${newSubjectName} kuri ${newStation} ${newTimeFrom}`;
+          message += `, ${formartWord(newSubjectName)} kuri ${formartWord(newStation)} ${newTimeFrom}`;
+          console.log(message);
           currentIndex++;
         }
         axios

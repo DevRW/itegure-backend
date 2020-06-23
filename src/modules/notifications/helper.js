@@ -20,18 +20,22 @@ export class NotificationHelper {
       )
       .start();
   }
-  toCamelCase(sentenceCase) {
-    let out = '';
-    sentenceCase.split('').forEach(function (el, idx) {
-      var add = el.toLowerCase();
-      out += (idx === 0 ? add : add[0].toUpperCase() + add.slice(1));
+  toPamelCase(word) {
+    word = word.toLowerCase();
+    word = word.split(' ');
+    let chars = '';
+    word.forEach((singleWord) => {
+      singleWord.split('').forEach((element, index) => {
+        chars += index === 0 ? singleWord[index].toUpperCase() : singleWord[index];
+      });
+      chars += ' ';
     });
-    return out;
+    return chars.slice(0, -1);
   }
   formartWord(word) {
     word = word.toUpperCase();
     if (word.split(' ').length == 1) {
-      word = this.toCamelCase(word);
+      word = this.toPamelCase(word);
     }
     return word;
   }
