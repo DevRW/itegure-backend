@@ -20,24 +20,5 @@ export class NotificationHelper {
       )
       .start();
   }
-  toPamelCase(word) {
-    word = word.toLowerCase();
-    word = word.split(' ');
-    let chars = '';
-    word.forEach((singleWord) => {
-      singleWord.split('').forEach((element, index) => {
-        chars += index === 0 ? singleWord[index].toUpperCase() : singleWord[index];
-      });
-      chars += ' ';
-    });
-    return chars.slice(0, -1);
-  }
-  formartWord(word) {
-    word = word.toUpperCase();
-    if (word.split(' ').length == 1) {
-      word = this.toPamelCase(word);
-    }
-    return word;
-  }
 }
 export default new NotificationHelper();
